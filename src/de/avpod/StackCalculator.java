@@ -7,7 +7,7 @@ public class StackCalculator {
     public static void main(String[] args) {
         String argLine = String.join("", args);
 
-        if (argLine.isEmpty() || Operation.valueOf(argLine.charAt(0)) != null) {
+        if (argLine.isEmpty() || Operation.valueOf(argLine.charAt(0)) != Operation.MINUS) {
             throw new RuntimeException("Wrong input, number expected first");
         }
 
@@ -27,7 +27,12 @@ public class StackCalculator {
             }
 
             if (numberBuilder.length() == 0) {
-                throw new RuntimeException("Double operations");
+                if (nextOperation == Operation.MINUS) {
+                    numberBuilder.append(nextChar);
+                    continue;
+                } else {
+                    throw new RuntimeException("Double operation not supported");
+                }
             }
 
             popTopOperation(stack, numberBuilder, nextOperation);
@@ -43,14 +48,23 @@ public class StackCalculator {
 
         if (stack.isEmpty()) {
             stack.push(number);
-            if(nextOperation != null)
+            if (nextOperation != null)
                 stack.push(String.valueOf(nextOperation.ch));
             return;
         }
 
         Operation previousOperation = Operation.valueOf(stack.peek().charAt(0));
-        if (previousOperation == Operation.PLUS || previousOperation == Operation.MINUS) {
+        if (previousOperation == Operation.PLUS) {
             stack.push(number);
+            if (nextOperation != null)
+                stack.push(String.valueOf(nextOperation.ch));
+            return;
+        }
+
+        if (previousOperation == Operation.MINUS) {
+            stack.pop();
+            stack.push(String.valueOf(Operation.PLUS.ch));
+            stack.push(String.valueOf(Integer.parseInt(number) * -1));
             if (nextOperation != null)
                 stack.push(String.valueOf(nextOperation.ch));
             return;
