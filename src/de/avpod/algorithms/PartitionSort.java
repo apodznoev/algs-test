@@ -7,39 +7,58 @@ public class PartitionSort {
 
 
     public static void main(String[] args) {
-        Random rd = new Random();
-        int[] arr1 = new int[rd.nextInt(1000)];
-        int[] arr2 = new int[arr1.length];
-        for (int i = 0; i < arr1.length; i++) {
-            int number = rd.nextInt();
-            arr1[i] = number;
-            arr2[i] = number;
+        int[] original;
+        int[] mySort;
+        int[] testSort;
+
+        if(args.length == 0) {
+            Random rd = new Random();
+            mySort = new int[rd.nextInt(100)];
+            testSort = new int[mySort.length];
+            original = new int[mySort.length];
+            for (int i = 0; i < mySort.length; i++) {
+                int number = rd.nextInt(1000);
+                mySort[i] = number;
+                testSort[i] = number;
+                original[i] = number;
+            }
+        } else {
+            mySort = new int[args.length];
+            testSort = new int[mySort.length];
+            original = new int[mySort.length];
+            for (int i = 0; i < mySort.length; i++) {
+                int number = Integer.valueOf(args[i]);
+                mySort[i] = number;
+                testSort[i] = number;
+                original[i] = number;
+            }
         }
 
-        sort(arr1);
-        Arrays.sort(arr2);
+        PartitionSort partitionSort = new PartitionSort();
+        partitionSort.sort(mySort);
+        Arrays.sort(testSort);
 
-        if (!Arrays.equals(arr1, arr2)) {
-            System.err.println(Arrays.toString(arr1));
+        if (!Arrays.equals(mySort, testSort)) {
+            System.err.println("Sort wrong: " + Arrays.toString(mySort));
+            System.err.println("Original array: " + Arrays.toString(original));
         } else {
-            System.out.println("Sort ok:" + Arrays.toString(arr1));
-
+            System.out.println("Sort ok:" + Arrays.toString(mySort));
         }
     }
 
-    public static void sort(int[] array) {
+    public void sort(int[] array) {
         quickSort(array, 0, array.length - 1);
     }
 
-    public static void quickSort(int[] array, int start, int end) {
+    private void quickSort(int[] array, int start, int end) {
         int partitionIdx = partition(array, start, end);
 
-        if (start < partitionIdx - 1) {
-            quickSort(array, start, partitionIdx - 1);
+        if (partitionIdx > start) {
+            quickSort(array, start, partitionIdx);
         }
 
         if (partitionIdx < end) {
-            quickSort(array, partitionIdx, end);
+            quickSort(array, partitionIdx + 1, end);
         }
     }
 
@@ -50,21 +69,26 @@ public class PartitionSort {
         int left = start;
         int right = end;
 
-        while (left <= right) {
+        while (true) {
             while (array[left] < pivot) left++;
             while (array[right] > pivot) right--;
 
-            if (left <= right) {
-                int tmp = array[left];
-                array[left] = array[right];
-                array[right] = tmp;
-                left++;
-                right--;
+            if(left >= right){
+                return right;
             }
+
+            swap(array, left, right);
+            left++;
+            right--;
         }
+    }
 
-        return left;
-
+    private static void swap(final int[] array, final int left, final int right) {
+        if (left < right) {
+            int tmp = array[left];
+            array[left] = array[right];
+            array[right] = tmp;
+        }
     }
 
 }
