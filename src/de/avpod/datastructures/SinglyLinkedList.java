@@ -1,4 +1,4 @@
-package de.avpod;
+package de.avpod.datastructures;
 
 public class SinglyLinkedList<T extends Comparable<T>> {
     private int size;

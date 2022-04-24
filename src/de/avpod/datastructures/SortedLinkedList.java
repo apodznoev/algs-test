@@ -1,6 +1,6 @@
-package de.avpod;
+package de.avpod.datastructures;
 
-import de.avpod.SinglyLinkedList.Node;
+import de.avpod.datastructures.SinglyLinkedList.Node;
 
 public class SortedLinkedList {
 

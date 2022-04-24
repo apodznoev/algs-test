@@ -1,4 +1,6 @@
-package de.avpod;
+package de.avpod.problems;
+
+import de.avpod.datastructures.Stack;
 
 import java.util.Arrays;
 import java.util.List;

@@ -1,4 +1,6 @@
-package de.avpod;
+package de.avpod.problems;
+
+import de.avpod.datastructures.Trie;
 
 import java.util.ArrayList;
 import java.util.Arrays;

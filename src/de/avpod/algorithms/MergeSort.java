@@ -1,4 +1,4 @@
-package de.avpod;
+package de.avpod.algorithms;
 
 import java.util.Arrays;
 import java.util.Random;

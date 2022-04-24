@@ -1,4 +1,4 @@
-package de.avpod;
+package de.avpod.problems;
 
 import java.util.HashMap;
 import java.util.Map;

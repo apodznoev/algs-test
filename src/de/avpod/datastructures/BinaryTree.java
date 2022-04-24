@@ -1,4 +1,4 @@
-package de.avpod;
+package de.avpod.datastructures;
 
 import java.util.function.Consumer;
 

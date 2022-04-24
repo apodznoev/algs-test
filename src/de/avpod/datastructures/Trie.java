@@ -1,4 +1,4 @@
-package de.avpod;
+package de.avpod.datastructures;
 
 import java.util.Arrays;
 import java.util.List;
@@ -73,7 +73,7 @@ public class Trie {
 
     public static class TrieNode {
         private TrieNode[] children;
-        boolean terminates;
+        public boolean terminates;
 
 
         public boolean hasChildren() {

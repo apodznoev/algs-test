@@ -1,4 +1,4 @@
-package de.avpod;
+package de.avpod.datastructures;
 
 public class StackQueue<T> {
 
