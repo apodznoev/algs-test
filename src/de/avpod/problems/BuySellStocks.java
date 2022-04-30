@@ -14,6 +14,7 @@ public class BuySellStocks {
         if (n == 2) {
             return new int[]{ prices[0], prices[1], Math.min(prices[0], prices[1])};
         }
+
         int[] bestBuySellMin = subroutine(prices, n - 1);
         int currentProfit = bestBuySellMin[1] - bestBuySellMin[0];
         int buyPrice = bestBuySellMin[0];
@@ -26,17 +27,22 @@ public class BuySellStocks {
         int assessProfit3 = newSellPrice - minObservedPrice;
 
         if (assessProfit1 > currentProfit && assessProfit1 >= assessProfit2 && assessProfit1 >= assessProfit3) {
-            return new int[]{buyPrice, newSellPrice, Math.min(newSellPrice, minObservedPrice)};
+            bestBuySellMin[0] = buyPrice;
+            bestBuySellMin[1] = newSellPrice;
         }
 
         if (assessProfit2 > currentProfit && assessProfit2 >= assessProfit1 && assessProfit2 >= assessProfit3) {
-            return new int[]{sellPrice, newSellPrice, Math.min(newSellPrice, minObservedPrice)};
+            bestBuySellMin[0] = sellPrice;
+            bestBuySellMin[1] = newSellPrice;
         }
 
         if (assessProfit3 > currentProfit) {
-            return new int[]{minObservedPrice, newSellPrice, Math.min(newSellPrice, minObservedPrice)};
+            bestBuySellMin[0] = minObservedPrice;
+            bestBuySellMin[1] = newSellPrice;
         }
 
-        return new int[]{ buyPrice, sellPrice, Math.min(newSellPrice, minObservedPrice)};
+        bestBuySellMin[2] = Math.min(newSellPrice, minObservedPrice);
+
+        return bestBuySellMin;
     }
 }
