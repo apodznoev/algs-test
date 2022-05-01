@@ -39,16 +39,18 @@ public class CoinChange {
             return -1;
         }
 
+        int minCoinsUsed = Integer.MAX_VALUE;
+
         for (int currentCoinsCount = largestCoinMaxCount; currentCoinsCount >= 0; currentCoinsCount--) {
             int remainingAmount = amount - largestCoinValue * currentCoinsCount;
             int[] remainingCoins = Arrays.copyOf(coins, coinsLength - 1);
             int solvedCoinsCount = greedyChange(remainingCoins, remainingAmount);
 
             if (solvedCoinsCount != -1) {
-                return currentCoinsCount + solvedCoinsCount;
+                minCoinsUsed = Math.min(currentCoinsCount + solvedCoinsCount, minCoinsUsed);
             }
         }
 
-        return -1;
+        return minCoinsUsed != Integer.MAX_VALUE ? minCoinsUsed : -1;
     }
 }
