@@ -7,33 +7,9 @@ import java.util.Arrays;
 public class MergeSortedLists {
 
     public static void main(String[] args) {
-        int[] array1 = Arrays.stream(args[0]
-                        .replace("]", "")
-                        .replace("[", "")
-                        .split(","))
-                .mapToInt(Integer::parseInt)
-                .toArray();
+        ListNode first1 = ListNode.readFromArray(args[0]);
+        ListNode first2 = ListNode.readFromArray(args[1]);
 
-        int[] array2 = Arrays.stream(args[1]
-                        .replace("]", "")
-                        .replace("[", "")
-                        .split(","))
-                .mapToInt(Integer::parseInt)
-                .toArray();
-
-        ListNode n1 = new ListNode(array1[0], null);
-        ListNode first1 = n1;
-        for (int i = 1; i < array1.length; i++) {
-            n1.next = new ListNode(array1[i], null);
-            n1 = n1.next;
-        }
-
-        ListNode n2 = new ListNode(array2[0], null);
-        ListNode first2 = n2;
-        for (int i = 1; i < array2.length; i++) {
-            n2.next = new ListNode(array2[i], null);
-            n2 = n2.next;
-        }
         MergeSortedLists msl = new MergeSortedLists();
 
         System.out.println(msl.mergeTwoLists(first1, first2));
