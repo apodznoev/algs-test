@@ -1,6 +1,6 @@
 package de.avpod.problems;
 
-import de.avpod.datastructures.Trie;
+import de.avpod.datastructures.Trie2020;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,7 +15,7 @@ public class Respace {
 
         String text = args[0];
         String[] dictionary = Arrays.copyOfRange(args, 1, args.length);
-        Trie trie = new Trie();
+        Trie2020 trie = new Trie2020();
         trie.addAll(dictionary);
 
         int unrecognizedCount = 0;
@@ -26,7 +26,7 @@ public class Respace {
         for (int i = 0; i < text.length(); i++) {
             char nextChar = text.charAt(i);
             currentWord.append(nextChar);
-            Trie.TrieNode node = trie.getNodeForKey(currentWord.toString());
+            Trie2020.TrieNode node = trie.getNodeForKey(currentWord.toString());
 
             if (node == null) {
                 currentUnrecognized.append(currentWord);
