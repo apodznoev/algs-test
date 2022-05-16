@@ -20,44 +20,15 @@ public class MaxTankVolume {
         while (height[left] == 0) {++left;}
         while (height[right] == 0) {--right;}
 
-        int volume = calcVolume(height, left, right);
-        int leftH = height[left];
-        int rightH = height[right];
-
-        boolean moveLeftBar = height[left] <= height[right];
-        if (moveLeftBar) {
-            ++left;
-        } else {
-            --right;
-        }
+        int volume = 0;
 
         while (left < right) {
-            if (moveLeftBar) {
-                if (height[left] <= leftH) {
-                    ++left;
-                    continue;
-                }
-
-                int newVolume = calcVolume(height, left, right);
-                if (newVolume > volume) {
-                    volume = newVolume;
-                    leftH = height[left];
-                }
-            } else {
-                if (height[right] <= rightH) {
-                    --right;
-                    continue;
-                }
-
-                int newVolume = calcVolume(height, left, right);
-                if (newVolume > volume) {
-                    volume = newVolume;
-                    rightH = height[right];
-                }
+            int newVolume = calcVolume(height, left, right);
+            if (newVolume > volume) {
+                volume = newVolume;
             }
 
-            moveLeftBar = height[left] <= height[right];
-            if (moveLeftBar) {
+            if (height[left] <= height[right]) {
                 ++left;
             } else {
                 --right;
