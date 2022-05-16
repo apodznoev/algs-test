@@ -2,6 +2,8 @@ package de.avpod.problems;
 
 import java.util.Arrays;
 
+import static de.avpod.util.ConsoleUtil.toIntArray;
+
 public class MaxSubarray {
 
     public static void main(String[] args) {
@@ -40,13 +42,7 @@ public class MaxSubarray {
         System.out.println(Arrays.toString(Arrays.copyOfRange(a, startIdx, endIdx + 1)));
     }
 
-    public static int[] toIntArray(String[] args) {
-        int[] result = new int[args.length];
-        for (int i = 0; i < args.length; i++) {
-            result[i] = Integer.parseInt(args[i]);
-        }
-        return result;
-    }
+
 
 
 }

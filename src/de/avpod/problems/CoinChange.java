@@ -1,14 +1,14 @@
 package de.avpod.problems;
 
+import de.avpod.util.ConsoleUtil;
+
 import java.util.Arrays;
 
 public class CoinChange {
 
     public static void main(String[] args) {
         CoinChange coinChange = new CoinChange();
-        int[] coins = Arrays.stream(args[0].split(","))
-                .mapToInt(Integer::parseInt)
-                .toArray();
+        int[] coins = ConsoleUtil.toIntArray(args[0]);
         int amount = Integer.valueOf(args[1]);
         System.out.print(Arrays.toString(coins));
         System.out.print(",");
