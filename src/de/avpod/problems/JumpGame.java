@@ -2,6 +2,8 @@ package de.avpod.problems;
 
 import de.avpod.util.ConsoleUtil;
 
+import java.util.Random;
+
 public class JumpGame {
     public static void main(String[] args) {
         JumpGame jumpGame = new JumpGame();
