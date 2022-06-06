@@ -5,55 +5,40 @@ import static de.avpod.datastructures.RedBlackTree.Color.RED;
 import static de.avpod.datastructures.RedBlackTree.Node.isRed;
 
 public class RedBlackTree {
+    private final static TreeVisitor traverser = new TreeVisitor() {
+        private final StringBuilder path = new StringBuilder();
+
+        @Override
+        public void visit(final Node node) {
+            System.out.println(path + ">" + node.value + " " + node.color);
+        }
+
+        @Override
+        public void onNextLevel() {
+            path.append("-");
+        }
+
+        @Override
+        public void onPrevLevel() {
+            path.deleteCharAt(path.length() - 1);
+        }
+    };
 
     public static void main(String[] args) {
-        final TreeVisitor traverser = new TreeVisitor() {
-            private final StringBuilder path = new StringBuilder();
 
-            @Override
-            public void visit(final Node node) {
-                System.out.println(path.toString() + ">" + node.value + " " + node.color);
-            }
 
-            @Override
-            public void onNextLevel() {
-                path.append("-");
-            }
+//        printTree(10, 9, 7, 5, 12, 14, 17, 16, 18, 19);
+        printTree(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+    }
 
-            @Override
-            public void onPrevLevel() {
-                path.deleteCharAt(path.length() - 1);
-            }
-        };
-
+    private static void printTree(int... nodes) {
         RedBlackTree rbt = new RedBlackTree();
-        rbt.add(10);
-        rbt.add(9);
-        rbt.add(7);
-        rbt.traversePreOrder(traverser);
-        System.out.println("____________");
-        rbt.add(5);
-        rbt.traversePreOrder(traverser);
-        System.out.println("____________");
-        rbt.add(12);
-        rbt.traversePreOrder(traverser);
-        System.out.println("____________");
-        rbt.add(14);
-        rbt.traversePreOrder(traverser);
-        System.out.println("____________");
-        rbt.add(17);
-        rbt.traversePreOrder(traverser);
-        System.out.println("____________");
-        rbt.add(16);
-        rbt.traversePreOrder(traverser);
-        System.out.println("____________");
-        rbt.add(18);
-        rbt.traversePreOrder(traverser);
-        System.out.println("____________");
-        rbt.add(19);
-        rbt.traversePreOrder(traverser);
 
-
+        for (int i : nodes) {
+            rbt.add(i);
+            rbt.traversePreOrder(traverser);
+            System.out.println("____________");
+        }
     }
 
     private Node root;
@@ -96,6 +81,18 @@ public class RedBlackTree {
             parent.left = addLeaf(parent.left, value);
         } else if (compare > 0) {
             parent.right = addLeaf(parent.right, value);
+        } else {
+            return parent;
+        }
+
+        if (isRed(parent.right)) {
+            parent = rotateLeft(parent);
+        }
+        if (isRed(parent.left) && isRed(parent.left.left)) {
+            parent = rotateRight(parent);
+        }
+        if (isRed(parent.left) && isRed(parent.right)) {
+            recolor(parent);
         }
 
         return parent;
@@ -129,12 +126,10 @@ public class RedBlackTree {
         return child;
     }
 
-    private Node recolor(final Node root) {
+    private void recolor(final Node root) {
         root.color = root.color.inverse();
         root.left.color = root.left.color.inverse();
         root.right.color = root.right.color.inverse();
-
-        return root;
     }
 
     private boolean searchValue(final Node node, final int value) {
