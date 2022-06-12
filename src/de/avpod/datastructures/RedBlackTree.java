@@ -5,7 +5,7 @@ import static de.avpod.datastructures.RedBlackTree.Color.RED;
 import static de.avpod.datastructures.RedBlackTree.Node.isRed;
 
 public class RedBlackTree {
-    private final static TreeVisitor traverser = new TreeVisitor() {
+    private static final TreeVisitor<Node> traverser = new TreeVisitor<>() {
         private final StringBuilder path = new StringBuilder();
 
         @Override
@@ -51,11 +51,11 @@ public class RedBlackTree {
         return searchValue(root, value);
     }
 
-    public void traversePreOrder(TreeVisitor action) {
+    public void traversePreOrder(TreeVisitor<Node> action) {
         doTraversePreOrder(root, action);
     }
 
-    private void doTraversePreOrder(final Node node, TreeVisitor action) {
+    private void doTraversePreOrder(final Node node, TreeVisitor<Node> action) {
         if (node == null) {
             return;
         }
@@ -85,7 +85,7 @@ public class RedBlackTree {
             return parent;
         }
 
-        if (isRed(parent.right)) {
+        if (isRed(parent.right) && !isRed(parent.left)) {
             parent = rotateLeft(parent);
         }
         if (isRed(parent.left) && isRed(parent.left.left)) {
@@ -149,7 +149,7 @@ public class RedBlackTree {
         }
     }
 
-    public static class Node {
+    public static class Node implements BinaryNode {
         int value;
         Color color;
         Node left;
@@ -174,6 +174,15 @@ public class RedBlackTree {
             return new Node(value, null, null, RED);
         }
 
+        @Override
+        public BinaryNode left() {
+            return left;
+        }
+
+        @Override
+        public BinaryNode right() {
+            return right;
+        }
     }
 
     public enum Color {
@@ -185,11 +194,4 @@ public class RedBlackTree {
         }
     }
 
-    private interface TreeVisitor {
-        void visit(RedBlackTree.Node node);
-
-        void onNextLevel();
-
-        void onPrevLevel();
-    }
 }
