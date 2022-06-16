@@ -90,6 +90,10 @@ public class IntervalTree {
         doTraversePreOrder(root, action);
     }
 
+    public void traverseInOrder(TreeVisitor<IntervalNode> action) {
+        doTraverseInOrder(root, action);
+    }
+
     private void validateInterval(final int[] interval) {
         if (interval.length != 2) {
             throw new IllegalArgumentException("Two-elements array exepcted:" + Arrays.toString(interval));
@@ -112,6 +116,22 @@ public class IntervalTree {
         doTraversePreOrder(node.left, action);
 
         doTraversePreOrder(node.right, action);
+
+        action.onPrevLevel();
+    }
+
+    private void doTraverseInOrder(final IntervalNode node, TreeVisitor<IntervalNode> action) {
+        if (node == null) {
+            return;
+        }
+
+        action.onNextLevel();
+
+        doTraverseInOrder(node.left, action);
+
+        action.visit(node);
+
+        doTraverseInOrder(node.right, action);
 
         action.onPrevLevel();
     }
@@ -253,8 +273,8 @@ public class IntervalTree {
     }
 
     public static class IntervalNode implements BinaryNode {
-        int low;
-        int high;
+        public int low;
+        public int high;
         int max;
         RedBlackTree.Color color;
         IntervalNode left;
@@ -281,6 +301,10 @@ public class IntervalTree {
 
         public boolean isOverlap(final int[] interval) {
             return !(interval[1] <= this.low || interval[0] >= this.high);
+        }
+
+        public boolean isOverlap(final IntervalNode node) {
+            return !(node.high <= this.low || node.low >= this.high);
         }
 
         @Override
