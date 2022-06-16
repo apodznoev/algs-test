@@ -201,6 +201,7 @@ public class IntervalTree {
 
         int compare = compareNodeValue(interval, parent);
         if (compare == 0) {
+            parent.duplicates++;
             return parent;
         }
 
@@ -276,6 +277,7 @@ public class IntervalTree {
         public int low;
         public int high;
         int max;
+        public int duplicates;
         RedBlackTree.Color color;
         IntervalNode left;
         IntervalNode right;

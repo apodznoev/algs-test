@@ -15,7 +15,7 @@ public class MeetingRooms {
     public static void main(String[] args) {
         MeetingRooms mr = new MeetingRooms();
         System.out.println(mr.minMeetingRooms(new int[][]{
-                {0,30},{15,20},{5,10},{-5, 15}, {0,20}
+                {1,5},{8,9},{8,9}
         }));
     }
     public int minMeetingRooms(int[][] intervals) {
@@ -31,12 +31,12 @@ public class MeetingRooms {
 
             @Override
             public void visit(final IntervalTree.IntervalNode node) {
-                int overlapCount = 0;
+                int overlapCount = node.duplicates;
                 ListIterator<IntervalTree.IntervalNode> iter = currentIntersection.listIterator();
                 while (iter.hasNext()) {
                     IntervalTree.IntervalNode previousNode = iter.next();
                     if (previousNode.isOverlap(node)) {
-                        overlapCount++;
+                        overlapCount = overlapCount + 1 + node.duplicates;
                     } else {
                         iter.remove();
                     }
@@ -58,7 +58,7 @@ public class MeetingRooms {
         };
         tree.traverseInOrder(visitor);
 
-        return maxOverlaps.get();
+        return 1 + maxOverlaps.get();
     }
 
     private int hashCountSolution(int[][] intervals) {
