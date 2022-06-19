@@ -13,6 +13,99 @@ import java.util.stream.Collectors;
 public class PathInBinaryTree {
 
     public String getDirections(TreeNode root, int startValue, int destValue) {
+        final LinkedList<PathNode> fromPath = new LinkedList<>();
+        final LinkedList<PathNode> toPath = new LinkedList<>();
+
+        final PathNode rootNode = new PathNode(root, Direction.up);
+        findPath(rootNode, startValue, fromPath);
+        findPath(rootNode, destValue, toPath);
+        fromPath.addFirst(rootNode);
+        toPath.addFirst(rootNode);
+        return mergePaths(fromPath, toPath);
+    }
+
+    private String mergePaths(final LinkedList<PathNode> fromPath,
+                              final LinkedList<PathNode> toPath) {
+        final int startValue = fromPath.getLast().val.val;
+        final int destValue = toPath.getLast().val.val;
+
+        PathNode lastCommonNode = null;
+
+        while (!fromPath.isEmpty() && !toPath.isEmpty()) {
+            PathNode from = fromPath.getFirst();
+            PathNode to = toPath.getFirst();
+
+            if(from.val == to.val) {
+                lastCommonNode = from;
+                fromPath.removeFirst();
+                toPath.removeFirst();
+            } else {
+                break;
+            }
+        }
+
+        if(lastCommonNode.val.val == startValue) {
+            return printPath(toPath);
+        }
+
+        if(lastCommonNode.val.val == destValue) {
+            return printInversedPath(fromPath);
+        }
+
+        return printInversedPath(fromPath) + printPath(toPath);
+    }
+
+    private String printInversedPath(final LinkedList<PathNode> toPath) {
+        return toPath.stream().map(pathNode -> Direction.up.toString()).collect(Collectors.joining());
+    }
+
+    private String printPath(final LinkedList<PathNode> toPath) {
+        return toPath.stream().map(pathNode -> pathNode.direction.toString()).collect(Collectors.joining());
+    }
+
+    private boolean findPath(final PathNode curNode, final int goal, LinkedList<PathNode> path) {
+        if (curNode.val.val == goal) {
+            return true;
+        }
+
+        if (curNode.val.left == null && curNode.val.right == null) {
+            return false;
+        }
+
+        if (curNode.val.left != null) {
+            final PathNode nextNode = new PathNode(curNode.val.left, Direction.left);
+            path.add(nextNode);
+            final boolean pathFound = findPath(nextNode, goal, path);
+            if (pathFound) {
+                return true;
+            }
+            path.removeLast();
+        }
+
+        if (curNode.val.right != null) {
+            final PathNode nextNode = new PathNode(curNode.val.right, Direction.right);
+            path.add(nextNode);
+            final boolean pathFound = findPath(nextNode, goal, path);
+            if (pathFound) {
+                return true;
+            }
+            path.removeLast();
+        }
+
+        return false;
+    }
+
+    public static class PathNode {
+        TreeNode val;
+        Direction direction;
+
+        public PathNode(final TreeNode val, final Direction direction) {
+            this.val = val;
+            this.direction = direction;
+        }
+    }
+
+    public String getDirectionsNaiv(TreeNode root, int startValue, int destValue) {
         Map<GraphNode, List<GraphEdge>> graph = new HashMap<>();
 
         graph.put(new GraphNode(root), new ArrayList<>());
@@ -40,21 +133,20 @@ public class PathInBinaryTree {
             List<GraphEdge> curPath = queue.poll();
             GraphEdge curEdge = curPath.get(curPath.size() - 1);
 
-            if(curEdge.to.equals(endNode)) {
+            if (curEdge.to.equals(endNode)) {
                 return curPath;
             }
 
-            for(GraphEdge nextEdge : graph.get(curEdge.to)) {
-                if(curEdge.from.equals(nextEdge.to)) {
+            for (GraphEdge nextEdge : graph.get(curEdge.to)) {
+                if (curEdge.from.equals(nextEdge.to)) {
                     //do not revisit node
                     continue;
                 }
 
-                if((curEdge.direction == Direction.left || curEdge.direction == Direction.right) && nextEdge.direction == Direction.up ) {
+                if ((curEdge.direction == Direction.left || curEdge.direction == Direction.right) && nextEdge.direction == Direction.up) {
                     //do not reverse down direction to avoid loops
                     continue;
                 }
-
 
 
                 List<GraphEdge> nextPath = new LinkedList<>(curPath);
