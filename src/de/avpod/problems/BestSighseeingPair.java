@@ -15,7 +15,7 @@ public class BestSighseeingPair {
     private int findMax(final int curScore,
                         final int first,
                         final int second,
-                        final int prevSpot,
+                        final int prevMaxSpot,
                         final int currentSpot) {
         if (currentSpot == spots.length) {
             return curScore;
@@ -23,12 +23,12 @@ public class BestSighseeingPair {
 
         int scoreFirstCurrent = score(first, currentSpot);
         int scoreSecondCurrent = score(second, currentSpot);
-        int scorePrevCurrent = score(prevSpot, currentSpot);
+        int scorePrevCurrent = score(prevMaxSpot, currentSpot);
         if (curScore > scoreFirstCurrent && curScore > scoreSecondCurrent && curScore > scorePrevCurrent) {
-            if(spots[currentSpot] + Math.abs(currentSpot - prevSpot) > spots[prevSpot]) {
+            if (spots[currentSpot] - spots[prevMaxSpot] > Math.abs(currentSpot - prevMaxSpot)) {
                 return findMax(curScore, first, second, currentSpot, currentSpot + 1);
             } else {
-                return findMax(curScore, first, second, prevSpot, currentSpot + 1);
+                return findMax(curScore, first, second, prevMaxSpot, currentSpot + 1);
             }
         }
 
@@ -40,7 +40,7 @@ public class BestSighseeingPair {
             return findMax(scoreSecondCurrent, second, currentSpot, currentSpot, currentSpot + 1);
         }
 
-        return findMax(scorePrevCurrent, prevSpot, currentSpot, currentSpot, currentSpot + 1);
+        return findMax(scorePrevCurrent, prevMaxSpot, currentSpot, currentSpot, currentSpot + 1);
     }
 
     private int score(final int i, final int j) {
