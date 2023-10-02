@@ -10,24 +10,32 @@ public class MergeSort {
         Random rd = new Random();
         int[] arr1 = new int[rd.nextInt(1000)];
         int[] arr2 = new int[arr1.length];
+        int[] original = new int[arr1.length];
         for (int i = 0; i < arr1.length; i++) {
-            int number = rd.nextInt();
+            int number = rd.nextInt(10000);
             arr1[i] = number;
             arr2[i] = number;
+            original[i] = number;
         }
 
-        sort(arr1);
+        MergeSort sorter = new MergeSort();
+        sorter.sort(arr1);
         Arrays.sort(arr2);
 
         if (!Arrays.equals(arr1, arr2)) {
-            System.err.println(Arrays.toString(arr1));
+            System.err.println(Arrays.toString(original) + " - original");
+            System.err.println(Arrays.toString(arr1) + " - sorted");
         } else {
             System.out.println("Sort ok:" + Arrays.toString(arr1));
 
         }
     }
 
-    public static void sort(int[] array) {
+    public void sort(int[] array) {
+        if (array.length < 2) {
+            return;
+        }
+
         int[] aux = new int[array.length];
         mergeSort(array, aux, 0, array.length - 1);
     }
@@ -43,30 +51,33 @@ public class MergeSort {
         merge(array, aux, start, mid, end);
     }
 
-    private static void merge(int[] array, int[] aux, int start, int mid, int end) {
-        for (int i = start; i <= end; i++) {
-            aux[i] = array[i];
-        }
+    private static void merge(final int[] array,
+                              final int[] aux,
+                              final int start,
+                              final int mid,
+                              final int end) {
+        System.arraycopy(array, start, aux, start, end - start + 1);
 
-        int startLeft = start;
-        int startRight = mid + 1;
+        int leftPointer = start;
+        int rightPointer = mid + 1;
+        int writePointer = leftPointer;
 
-        int current = startLeft;
-        while (startLeft <= mid && startRight <= end) {
-            if (aux[startLeft] <= aux[startRight]) {
-                array[current] = aux[startLeft];
-                startLeft++;
+        while (leftPointer <= mid && rightPointer <= end) {
+            if (aux[leftPointer] <= aux[rightPointer]) {
+                array[writePointer] = aux[leftPointer];
+                leftPointer++;
             } else {
-                array[current] = aux[startRight];
-                startRight++;
+                array[writePointer] = aux[rightPointer];
+                rightPointer++;
             }
-            current++;
+
+            writePointer++;
         }
 
-        while (startLeft <= mid) {
-            array[current] = aux[startLeft];
-            current++;
-            startLeft++;
+        while (leftPointer <= mid) {
+            array[writePointer] = aux[leftPointer];
+            leftPointer++;
+            writePointer++;
         }
     }
 }
